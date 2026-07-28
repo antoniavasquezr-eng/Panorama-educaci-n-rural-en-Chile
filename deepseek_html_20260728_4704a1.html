@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script>document.documentElement.classList.add('js');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Educación rural en Chile — Sistematización de datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #1e1f22;
+    --ink-soft: #4a4d52;
+    --yellow: #f5d90a;
+    --yellow-deep: #d6b800;
+    --paper: #ffffff;
+    --fog: #f6f5f2;
+    --fog-deep: #eae9e5;
+    --slate: #7a7d82;
+    --line: #e1e0db;
+    --urban: #2b2e33;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --wrap: 1200px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.02);
+    --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin:0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  p { margin: 0; }
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+
+  /* reveal - ahora solo efecto visual, siempre visibles */
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .js .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) { .js .reveal { transition: none; } }
+
+  /* header */
+  header.topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 12px 28px;
+    display: flex; align-items: center; gap: 16px; justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink);
+    background: var(--yellow);
+    padding: 4px 12px 4px 10px;
+    border-radius: var(--radius-sm);
+    letter-spacing: -0.03em;
+    box-shadow: var(--shadow-sm);
+  }
+  .logo span { color: var(--ink); }
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--slate);
+    display: block;
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+  .brand-text .name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .brand-text .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .print-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+  }
+  .print-btn:hover { background: var(--yellow); color: var(--ink); }
+
+  /* subnav */
+  nav.subnav {
+    position: sticky; top: 68px; z-index: 49;
+    background: var(--ink);
+    color: #fff;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  nav.subnav::-webkit-scrollbar { display: none; }
+  nav.subnav .inner {
+    max-width: var(--wrap); margin: 0 auto; padding: 0 28px;
+    display: flex; align-items: center;
+  }
+  nav.subnav a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #b7b9bc;
+    padding: 12px 0;
+    margin-right: 24px;
+    position: relative;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  nav.subnav a:not(:last-child)::after {
+    content: '—';
+    color: #54565a;
+    margin-left: 24px;
+  }
+  nav.subnav a:hover { color: #fff; }
+  nav.subnav a.active { color: var(--yellow); }
+
+  /* hero */
+  .hero {
+    padding: 80px 0 64px;
+    position: relative;
+    background: linear-gradient(180deg, var(--fog) 0%, var(--paper) 100%);
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 20px;
+  }
+  .eyebrow .mark {
+    width: 10px; height: 10px;
+    background: var(--yellow);
+    display: inline-block;
+    border-radius: 2px;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 600;
+    line-height: 1.08;
+    max-width: 920px;
+  }
+  .hero .lede {
+    max-width: 640px;
+    margin-top: 20px;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 0 48px;
+    margin-top: 56px;
+    border-top: 2px solid var(--ink);
+    padding-top: 24px;
+  }
+  .hero-stat { border-right: 1px solid var(--line); padding-right: 40px; }
+  .hero-stat:last-child { border-right: none; padding-right: 0; }
+  .hero-num-wrap { position: relative; display: inline-block; }
+  .hero-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 5.2vw, 3.8rem);
+    line-height: 1;
+    color: var(--ink);
+  }
+  .hero-chip {
+    position: absolute; top: -6px; right: -16px;
+    width: 16px; height: 24px;
+    background: var(--yellow);
+    border-radius: 2px;
+  }
+  .hero-stat .stat-label {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 240px;
+    display: block;
+  }
+  .hero-dash {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    color: var(--yellow-deep);
+    padding: 0 6px 8px 0;
+    align-self: center;
+  }
+  .hero-cta { margin-top: 48px; }
+  .hero-cta a {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--yellow);
+    padding-bottom: 4px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .hero-cta a:hover { border-color: var(--ink); color: var(--ink-soft); }
+
+  /* sections */
+  .section { padding: 80px 0; }
+  .section.alt { background: var(--fog); }
+  .section-head { max-width: 700px; margin-bottom: 44px; }
+  .section-head h2 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); font-weight: 600; }
+  .section-head .lede { margin-top: 12px; font-size: 16px; color: var(--ink-soft); }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .stat-card {
+    background: var(--paper);
+    padding: 28px 24px;
+  }
+  .stat-card .num-wrap { position: relative; display: inline-block; }
+  .stat-card .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 2.4rem;
+    color: var(--ink);
+  }
+  .stat-card .chip-mini {
+    position: absolute; top: -4px; right: -10px;
+    width: 10px; height: 16px;
+    background: var(--yellow);
+    border-radius: 2px;
+  }
+  .stat-card .label {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+    display: block;
+  }
+  .stat-card .foot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+    margin-top: 12px;
+    display: block;
+  }
+
+  .caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+    margin-top: 14px;
+  }
+  .callout {
+    background: var(--ink);
+    color: #fff;
+    padding: 22px 26px;
+    border-radius: var(--radius-md);
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-top: 24px;
+    box-shadow: var(--shadow-md);
+  }
+  .callout b { color: var(--yellow); font-weight: 600; }
+  .callout-lite {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 18px 22px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .callout-lite b { color: var(--ink); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .chart-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px 24px 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .chart-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .toggle-group {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .toggle-group button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: #fff;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: background 0.15s, color 0.15s;
+  }
+  .toggle-group button.active {
+    background: var(--yellow);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .toggle-group button:hover { background: var(--fog); }
+
+  .region-panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .region-panel label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+  }
+  select#regionSelect {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .region-detail {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .region-detail .rd-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .region-detail .rd-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .region-detail .rd-label {
+    font-size: 12.5px;
+    color: var(--slate);
+  }
+  .region-note {
+    margin-top: 16px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+  }
+  .region-note.empty { color: var(--slate); font-style: italic; }
+
+  .legend-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .compare-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .compare-card .ct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 14px;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .bar-row .bl {
+    width: 64px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 22px;
+    background: var(--fog-deep);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+  .bar-fill.rural { background: var(--yellow); }
+  .bar-fill.urban { background: var(--urban); }
+  .bar-row .bv {
+    width: 70px;
+    text-align: right;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .simple-list {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  .simple-list .sl-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .simple-list .sl-item:last-child { border-bottom: none; }
+  .simple-list .sl-item .k { color: var(--ink-soft); }
+  .simple-list .sl-item .v { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+
+  footer {
+    background: var(--ink);
+    color: #b7b9bc;
+    padding: 56px 0 36px;
+    margin-top: 0;
+  }
+  footer .foot-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  footer h3 { color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+  footer p { font-size: 13px; line-height: 1.7; }
+  footer .foot-logo {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #fff;
+    background: var(--yellow);
+    padding: 2px 14px 2px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  footer .foot-logo small {
+    font-size: 11px;
+    font-weight: 400;
+    color: #b7b9bc;
+    display: block;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  footer .foot-bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #3a3c40;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #8a8c90;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  canvas { max-width: 100%; }
+
+  @media (max-width: 860px) {
+    .two-col { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    footer .foot-grid { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr; row-gap: 28px; }
+    .hero-stat { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+    .hero-dash { display: none; }
+    .topbar-inner { flex-wrap: wrap; }
+    .brand { flex: 1; }
+  }
+  @media print {
+    header.topbar, nav.subnav, .hero-cta, .print-btn { display: none !important; }
+    .section { padding: 32px 0; break-inside: avoid; }
+    .js .reveal { opacity: 1 !important; transform: none !important; }
+    body { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo">
+        FUN<span>99</span>
+        <small class="logo-sub">Fundación</small>
+      </div>
+      <div class="brand-text">
+        <span class="name">Fundación 99</span>
+        <span class="sub">Educación rural · Chile</span>
+      </div>
+    </div>
+    <button class="print-btn" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+</header>
+
+<nav class="subnav">
+  <div class="inner" id="subnavInner">
+    <a href="#panorama" data-sec="panorama">Panorama</a>
+    <a href="#regiones" data-sec="regiones">Regiones</a>
+    <a href="#multigrado" data-sec="multigrado">Multigrado</a>
+    <a href="#niveles" data-sec="niveles">Niveles</a>
+    <a href="#trayectoria" data-sec="trayectoria">Trayectoria</a>
+    <a href="#gestion" data-sec="gestion">Gestión</a>
+    <a href="#vulnerabilidad" data-sec="vulnerabilidad">Vulnerabilidad</a>
+    <a href="#docentes" data-sec="docentes">Docentes</a>
+    <a href="#financiamiento" data-sec="financiamiento">Financiamiento</a>
+    <a href="#simce" data-sec="simce">SIMCE</a>
+    <a href="#superior" data-sec="superior">Ed. superior</a>
+    <a href="#tendencia" data-sec="tendencia">Tendencia</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <p class="eyebrow"><span class="mark"></span>Sistematización de datos · 2024</p>
+    <h1>Casi 3 de cada 10 escuelas de Chile son rurales. Ahí vive apenas 1 de cada 13 estudiantes.</h1>
+    <p class="lede">Un mapa de datos para entender el tamaño, la organización y las brechas de la educación rural chilena — pensado para revisarse en clase o por cuenta propia, con cifras oficiales del sistema escolar 2023–2024.</p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-num-wrap"><span class="hero-num mono-num" data-count="29.3" data-decimals="1" data-suffix="%">0%</span><span class="hero-chip"></span></div>
+        <span class="stat-label">de los establecimientos del país son rurales — 3.121 en total.</span>
+      </div>
+      <div class="hero-dash">—</div>
+      <div class="hero-stat">
+        <div class="hero-num-wrap"><span class="hero-num mono-num" data-count="7.9" data-decimals="1" data-suffix="%">0%</span><span class="hero-chip"></span></div>
+        <span class="stat-label">de la matrícula escolar total — 273.935 estudiantes rurales.</span>
+      </div>
+    </div>
+
+    <div class="hero-cta"><a href="#panorama">Explorar los datos ↓</a></div>
+  </section>
+
+  <!-- 1. PANORAMA -->
+  <section class="section" id="panorama">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Panorama nacional</p>
+        <h2>El tamaño real de la ruralidad escolar</h2>
+        <p class="lede">Muchas escuelas, pocos estudiantes por sala. La ruralidad chilena se organiza en establecimientos pequeños, muy distintos en escala a la educación urbana.</p>
+      </div>
+
+      <div class="stat-grid reveal">
+        <div class="stat-card">
+          <div class="num-wrap"><span class="num mono-num" data-count="3121" data-suffix="">0</span><span class="chip-mini"></span></div>
+          <span class="label">Establecimientos rurales en 2024</span>
+          <span class="foot">29,3% del total nacional</span>
+        </div>
+        <div class="stat-card">
+          <div class="num-wrap"><span class="num mono-num" data-count="273935" data-suffix="">0</span><span class="chip-mini"></span></div>
+          <span class="label">Estudiantes matriculados en zona rural</span>
+          <span class="foot">7,9% de la matrícula total (2024)</span>
+        </div>
+        <div class="stat-card">
+          <div class="num-wrap"><span class="num mono-num" data-count="12" data-suffix="">0</span><span class="chip-mini"></span></div>
+          <span class="label">Estudiantes promedio por curso rural</span>
+          <span class="foot">vs. 27 estudiantes en escuelas urbanas</span>
+        </div>
+      </div>
+      <div class="callout-lite reveal">
+        <b>Para tener en cuenta:</b> entre 2018 y 2022 la matrícula rural creció 3,2% (de 272.919 a 281.537 estudiantes), resistiendo mejor que la urbana el quiebre de 2019–2020. Todos los detalles de esta evolución están en la sección <a href="#tendencia" style="color:var(--yellow-deep); text-decoration:none; font-weight:600;">Tendencia →</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. REGIONES -->
+  <section class="section alt" id="regiones">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Distribución regional</p>
+        <h2>¿Dónde está la escuela rural?</h2>
+        <p class="lede">La Araucanía concentra más establecimientos rurales que ninguna otra región, pero es el Maule quien concentra más estudiantes: escuelas y matrícula no siempre se mueven juntas. Explora cada región en el panel de la derecha.</p>
+      </div>
+
+      <div class="two-col reveal">
+        <div class="chart-box">
+          <div class="chart-title">
+            <span>Regiones por número de escuelas y matrícula rural</span>
+            <div class="toggle-group" id="regToggle">
+              <button data-mode="schools" class="active">Escuelas</button>
+              <button data-mode="students">Matrícula</button>
+            </div>
+          </div>
+          <canvas id="regionChart" height="420"></canvas>
+          <p class="caption">Fuente: sistematización de datos oficiales del sistema escolar, 2024.</p>
+        </div>
+
+        <div class="region-panel">
+          <label for="regionSelect">Explorar una región</label>
+          <select id="regionSelect"></select>
+          <div class="region-detail">
+            <div class="rd-row">
+              <span class="rd-label">Escuelas rurales</span>
+              <span class="rd-num" id="rdSchools">—</span>
+            </div>
+            <div class="rd-row">
+              <span class="rd-label">% del total rural nacional</span>
+              <span class="rd-num" id="rdSchoolsPct">—</span>
+            </div>
+            <div class="rd-row">
+              <span class="rd-label">Matrícula rural</span>
+              <span class="rd-num" id="rdStudents">—</span>
+            </div>
+            <div class="rd-row">
+              <span class="rd-label">% de la matrícula rural nacional</span>
+              <span class="rd-num" id="rdStudentsPct">—</span>
+            </div>
+          </div>
+          <p class="region-note" id="rdNote">Selecciona una región para ver su dato destacado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MULTIGRADO -->
+  <section class="section" id="multigrado">
+    <div class="wrap">
+      <div class="two-col reveal">
+        <div>
+          <p class="eyebrow"><span class="mark"></span>Organización pedagógica</p>
+          <h2>El multigrado es casi un rasgo exclusivo de lo rural</h2>
+          <p class="lede" style="margin-top:12px; max-width:520px;">En un curso multigrado, un mismo docente enseña simultáneamente a estudiantes de dos o más niveles. En la educación urbana casi no existe; en la rural, es la forma en que aprende uno de cada cinco estudiantes.</p>
+          <div class="simple-list">
+            <div class="sl-item"><span class="k">Estudiantes rurales en cursos multigrado</span><span class="v">57.665</span></div>
+            <div class="sl-item"><span class="k">Estudiantes rurales en cursos simples</span><span class="v">216.270</span></div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>% de matrícula en cursos multigrado</span></div>
+          <canvas id="multigradoChart" height="260"></canvas>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Rural — 21,1%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Urbana — 0,3%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. NIVELES -->
+  <section class="section alt" id="niveles">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Nivel de enseñanza</p>
+        <h2>Una ruralidad que es, sobre todo, educación básica</h2>
+        <p class="lede">La media rural —y en especial la técnico-profesional— tiene una presencia mucho más acotada que la básica y la parvularia.</p>
+      </div>
+      <div class="chart-box reveal">
+        <div class="chart-title"><span>Distribución de la matrícula rural por nivel de enseñanza</span></div>
+        <canvas id="nivelesChart" height="140"></canvas>
+        <p class="caption">Fuente: sistematización de datos oficiales del sistema escolar, 2024.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. TRAYECTORIA -->
+  <section class="section" id="trayectoria">
+    <div class="wrap">
+      <div class="two-col reveal">
+        <div>
+          <p class="eyebrow"><span class="mark"></span>Transición 8° básico → I° medio</p>
+          <h2>La escuela rural básica como puerta de salida</h2>
+          <p class="lede" style="margin-top:12px; max-width:520px;">De cada 10 estudiantes rurales que terminan 8° básico, 7 continúan I° medio en un establecimiento urbano. Solo 1 de cada 4 se mantiene en la educación rural.</p>
+          <div class="callout" style="margin-top:24px;">
+            La migración a un liceo urbano varía enormemente por región: en <b>Tarapacá solo el 8,6%</b> se traslada, mientras que en <b>Magallanes lo hace el 100%</b> — aunque sobre una cohorte rural muy pequeña.
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>Destino tras 8° básico rural (2023)</span></div>
+          <canvas id="trayectoriaChart" height="260"></canvas>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Pasa a liceo urbano — 70,1%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Sigue en lo rural — 25,9%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--slate)"></span>Repite o deserta — 4,0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GESTION -->
+  <section class="section alt" id="gestion">
+    <div class="wrap">
+      <div class="two-col reveal">
+        <div>
+          <p class="eyebrow"><span class="mark"></span>Dependencia administrativa</p>
+          <h2>La ruralidad sigue siendo, mayoritariamente, pública</h2>
+          <p class="lede" style="margin-top:12px; max-width:520px;">Sumando administración municipal y SLEP, cerca de 78% de la oferta rural es de gestión pública. El resto son establecimientos particulares subvencionados.</p>
+          <div class="callout-lite">
+            <b>Casos extremos:</b> en La Araucanía, 52,2% de las escuelas rurales son particulares subvencionadas — muy por sobre el promedio nacional. En Antofagasta, en cambio, el 100% de las escuelas rurales es municipal.
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>Dependencia de los establecimientos rurales</span></div>
+          <canvas id="dependenciaChart" height="260"></canvas>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Municipal — 67,1%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--slate)"></span>SLEP — 10,8%</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Part. subvencionado — 21,9%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. VULNERABILIDAD -->
+  <section class="section" id="vulnerabilidad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Vulnerabilidad socioeconómica</p>
+        <h2>La ruralidad concentra vulnerabilidad</h2>
+      </div>
+      <div class="two-col reveal">
+        <div class="stat-card" style="border:1px solid var(--line); border-radius:var(--radius-md); box-shadow: var(--shadow-sm);">
+          <div class="num-wrap"><span class="num mono-num" style="font-size:3.4rem;" data-count="90" data-suffix="%">0%</span><span class="chip-mini" style="top:-2px; right:-14px; width:12px; height:20px;"></span></div>
+          <span class="label" style="font-size:14.5px; margin-top:10px;">de los estudiantes rurales de educación básica es vulnerable socioeconómicamente — casi 9 de cada 10.</span>
+        </div>
+        <div>
+          <div class="callout">
+            En <b>La Araucanía</b>, la vulnerabilidad rural en básica llega a <b>95,7%</b>. <b>Los Ríos</b> y <b>La Araucanía</b> también encabezan la vulnerabilidad en enseñanza media.
+          </div>
+          <div class="callout-lite">
+            La única excepción del país es <b>Magallanes</b>: la única región donde la vulnerabilidad rural no supera a la urbana.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. DOCENTES -->
+  <section class="section alt" id="docentes">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Dotación docente</p>
+        <h2>Escuelas pequeñas, equipos pequeños</h2>
+        <p class="lede">Menos funcionarios, menos docentes por establecimiento y, con frecuencia, sin un director formal a cargo.</p>
+      </div>
+      <div class="compare-grid reveal">
+        <div class="compare-card">
+          <div class="ct">Funcionarios promedio por escuela</div>
+          <div class="bar-row"><span class="bl">Rural</span><div class="bar-track"><div class="bar-fill rural" style="width:37%"></div></div><span class="bv">11</span></div>
+          <div class="bar-row"><span class="bl">Urbano</span><div class="bar-track"><div class="bar-fill urban" style="width:100%"></div></div><span class="bv">30</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="ct">Docentes de aula promedio por escuela</div>
+          <div class="bar-row"><span class="bl">Rural</span><div class="bar-track"><div class="bar-fill rural" style="width:40%"></div></div><span class="bv">10</span></div>
+          <div class="bar-row"><span class="bl">Urbano</span><div class="bar-track"><div class="bar-fill urban" style="width:100%"></div></div><span class="bv">25</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="ct">Matrícula por docente de aula</div>
+          <div class="bar-row"><span class="bl">Rural</span><div class="bar-track"><div class="bar-fill rural" style="width:51%"></div></div><span class="bv">8,7</span></div>
+          <div class="bar-row"><span class="bl">Urbano</span><div class="bar-track"><div class="bar-fill urban" style="width:100%"></div></div><span class="bv">16,9</span></div>
+        </div>
+        <div class="compare-card">
+          <div class="ct">Establecimientos con profesor encargado (no director)</div>
+          <div class="bar-row"><span class="bl">Rural</span><div class="bar-track"><div class="bar-fill rural" style="width:100%"></div></div><span class="bv">58,3%</span></div>
+          <div class="bar-row"><span class="bl">Urbano</span><div class="bar-track"><div class="bar-fill urban" style="width:3%"></div></div><span class="bv">1,9%</span></div>
+        </div>
+      </div>
+      <div class="callout-lite reveal">
+        <b>12,1%</b> de las escuelas rurales es unidocente (un solo profesor a cargo de todo el establecimiento) y <b>29,7%</b> tiene menos de 3 docentes — un contexto que exige liderazgo distribuido, apoyo técnico y formación específica para la enseñanza multigrado.
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FINANCIAMIENTO -->
+  <section class="section" id="financiamiento">
+    <div class="wrap">
+      <div class="two-col reveal">
+        <div>
+          <p class="eyebrow"><span class="mark"></span>Financiamiento</p>
+          <h2>Una subvención mayor, pensada para compensar el aislamiento</h2>
+          <p class="lede" style="margin-top:12px; max-width:520px;">La subvención efectiva por estudiante es más alta en la ruralidad. A eso se suma la subvención de ruralidad y el llamado "piso rural", que buscan sostener escuelas con matrícula muy baja.</p>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>Subvención efectiva por estudiante (2023, $ CLP)</span></div>
+          <canvas id="finChart" height="220"></canvas>
+          <p class="caption">31% de los establecimientos rurales con menos de 17 estudiantes recibió la subvención de piso rural en 2023.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. SIMCE -->
+  <section class="section alt" id="simce">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Resultados SIMCE</p>
+        <h2>Menos cobertura de evaluación, y una brecha de aprendizaje que persiste</h2>
+        <p class="lede">Las escuelas rurales más pequeñas son también las que menos logran rendir la prueba — y las brechas de aprendizaje llevan casi dos décadas sin cerrarse del todo.</p>
+      </div>
+      <div class="two-col reveal">
+        <div class="chart-box">
+          <div class="chart-title"><span>Cobertura SIMCE por nivel (2023)</span></div>
+          <canvas id="coberturaChart" height="240"></canvas>
+          <p class="caption">En escuelas rurales con menos de 5 estudiantes en 4° básico, la cobertura cae a 43%.</p>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>Brecha urbano–rural en 4° básico (2023, puntos SIMCE)</span></div>
+          <canvas id="brechaChart" height="240"></canvas>
+          <p class="caption">El promedio histórico de la brecha en Lectura desde 2005 ronda los 13 puntos. Resultados detallados por región y establecimiento están disponibles en el portal de la Agencia de la Calidad de la Educación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. SUPERIOR -->
+  <section class="section" id="superior">
+    <div class="wrap">
+      <div class="two-col reveal">
+        <div>
+          <p class="eyebrow"><span class="mark"></span>Acceso a educación superior</p>
+          <h2>La brecha se achica, pero no se cierra</h2>
+          <p class="lede" style="margin-top:12px; max-width:520px;">El acceso inmediato a educación superior es más bajo entre egresados rurales, aunque la tendencia reciente es positiva.</p>
+          <div class="callout" style="margin-top:22px;">
+            De cada 4 estudiantes rurales adicionales que hoy acceden a educación superior, <b>3 lo hacen a la universidad</b>.
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title"><span>Acceso inmediato a educación superior</span></div>
+          <canvas id="superiorChart" height="230"></canvas>
+          <p class="caption">Brecha de 5,1 puntos porcentuales a favor de lo urbano.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. TENDENCIA -->
+  <section class="section alt" id="tendencia">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="mark"></span>Tendencia 2018–2024</p>
+        <h2>Una matrícula rural que crece, y que resistió mejor la crisis</h2>
+        <p class="lede">Mientras el sistema urbano se contraía en el quiebre 2019–2020, la matrícula rural siguió creciendo.</p>
+      </div>
+      <div class="two-col reveal">
+        <div class="chart-box">
+          <div class="chart-title"><span>Matrícula rural vs. sistema total</span></div>
+          <canvas id="tendenciaChart" height="260"></canvas>
+          <p class="caption">Sistema total sin dato oficial comparable para 2024 en esta sistematización.</p>
+        </div>
+        <div>
+          <div class="simple-list">
+            <div class="sl-item"><span class="k">Crecimiento matrícula rural 2018–2022</span><span class="v">+3,2%</span></div>
+            <div class="sl-item"><span class="k">Crecimiento sistema total 2018–2022</span><span class="v">+1,7%</span></div>
+            <div class="sl-item"><span class="k">Matrícula rural en el quiebre 2019–2020</span><span class="v" style="color:var(--yellow-deep);">+1,5%</span></div>
+            <div class="sl-item"><span class="k">Matrícula urbana en el quiebre 2019–2020</span><span class="v" style="color:var(--ink-soft);">−0,6%</span></div>
+          </div>
+          <div class="callout-lite">
+            La matrícula rural resistió el shock 2019–2020 mejor que la urbana, y en 2024 se registraron 273.935 estudiantes rurales — consistente con el nivel alcanzado tras el período de crecimiento 2018–2022.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <span class="foot-logo">FUN<span>99</span><small>Fundación</small></span>
+      <p>Esta página reúne, en un solo lugar, los indicadores clave de la educación rural chilena para uso del curso: tamaño del sistema, distribución territorial, organización pedagógica, dotación docente, financiamiento, resultados de aprendizaje y trayectoria educativa.</p>
+    </div>
+    <div>
+      <h3>Sobre los datos</h3>
+      <p>Cifras del sistema escolar chileno, año de referencia 2023–2024 (Mineduc / Agencia de la Calidad de la Educación). Los porcentajes están redondeados a un decimal y pueden no sumar exactamente 100% por efecto del redondeo. Sistematización elaborada con fines educativos para Fundación 99.</p>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>Fundación 99 — Educación rural en Chile</span>
+    <span>Actualizado 2024</span>
+  </div>
+</footer>
+
+<script>
+// ---------------------------------------------------------------
+// DATOS COMPLETOS
+// ---------------------------------------------------------------
+const regions = [
+  { name: "Arica y Parinacota", schools: 30, schoolsPct: 1.0, students: 2818, studentsPct: 1.0, note: null },
+  { name: "Tarapacá", schools: 49, schoolsPct: 1.6, students: 13255, studentsPct: 4.8, note: "Solo 8,6% de quienes terminan 8° básico rural migra a un liceo urbano: la menor migración del país." },
+  { name: "Antofagasta", schools: 15, schoolsPct: 0.5, students: 726, studentsPct: 0.3, note: "El 100% de las escuelas rurales de la región es de administración municipal." },
+  { name: "Atacama", schools: 36, schoolsPct: 1.2, students: 1870, studentsPct: 0.7, note: null },
+  { name: "Coquimbo", schools: 295, schoolsPct: 9.5, students: 14135, studentsPct: 5.2, note: null },
+  { name: "Valparaíso", schools: 138, schoolsPct: 4.4, students: 13952, studentsPct: 5.1, note: null },
+  { name: "Metropolitana", schools: 113, schoolsPct: 3.6, students: 33927, studentsPct: 12.4, note: "Con pocas escuelas rurales, concentra la segunda mayor matrícula rural del país." },
+  { name: "O'Higgins", schools: 248, schoolsPct: 7.9, students: 32152, studentsPct: 11.7, note: null },
+  { name: "Maule", schools: 366, schoolsPct: 11.7, students: 40073, studentsPct: 14.6, note: "La región con más estudiantes rurales de todo Chile." },
+  { name: "Ñuble", schools: 198, schoolsPct: 6.3, students: 14717, studentsPct: 5.4, note: null },
+  { name: "Biobío", schools: 280, schoolsPct: 9.0, students: 25377, studentsPct: 9.3, note: null },
+  { name: "La Araucanía", schools: 578, schoolsPct: 18.5, students: 32566, studentsPct: 11.9, note: "La región con más escuelas rurales del país. 52,2% son particulares subvencionadas y la vulnerabilidad en básica llega a 95,7%." },
+  { name: "Los Ríos", schools: 245, schoolsPct: 7.9, students: 15298, studentsPct: 5.6, note: "Una de las regiones con mayor vulnerabilidad rural en enseñanza media." },
+  { name: "Los Lagos", schools: 483, schoolsPct: 15.5, students: 29458, studentsPct: 10.8, note: null },
+  { name: "Aysén", schools: 34, schoolsPct: 1.1, students: 3363, studentsPct: 1.2, note: null },
+  { name: "Magallanes", schools: 13, schoolsPct: 0.4, students: 248, studentsPct: 0.1, note: "El 100% de quienes terminan 8° básico rural pasa a un liceo urbano (cohorte muy pequeña). Es también la única región donde la vulnerabilidad rural no supera a la urbana." }
+];
+
+const INK = '#1e1f22', YELLOW = '#f5d90a', URBAN = '#2b2e33', SLATE = '#7a7d82', LINE = '#e1e0db';
+
+// ---------------------------------------------------------------
+// FUNCIÓN PARA FORMATEAR NÚMEROS
+// ---------------------------------------------------------------
+function fmt(n) { return Number(n).toLocaleString('es-CL'); }
+
+// ---------------------------------------------------------------
+// CONTADORES ANIMADOS (se ejecutan al cargar la página)
+// ---------------------------------------------------------------
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.count);
+  if (isNaN(target)) return;
+  const decimals = parseInt(el.dataset.decimals || '0', 10);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1100;
+  const start = performance.now();
+
+  function tick(now) {
+    const p = Math.min(1, (now - start) / duration);
+    // Función de easing para un efecto más suave
+    const eased = 1 - Math.pow(1 - p, 3);
+    const current = target * eased;
+    el.textContent = current.toLocaleString('es-CL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+    if (p < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      // Aseguramos el valor final exacto
+      el.textContent = target.toLocaleString('es-CL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+// ---------------------------------------------------------------
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ---------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM cargado. Inicializando...');
+
+  // 1. Activar contadores
+  const counterEls = document.querySelectorAll('.mono-num[data-count]');
+  console.log(`Encontrados ${counterEls.length} contadores.`);
+  counterEls.forEach(el => {
+    // Forzar el valor inicial a 0 para que la animación sea visible
+    const suffix = el.dataset.suffix || '';
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    el.textContent = '0'.padEnd(decimals+1, '0').replace('.', ',') + suffix;
+    animateCounter(el);
+  });
+
+  // 2. Cargar gráficos si Chart.js está disponible
+  if (typeof Chart === 'undefined') {
+    console.warn('Chart.js no está cargado. Los gráficos no se mostrarán.');
+    // Ocultar los canvas o mostrar un mensaje
+    document.querySelectorAll('.chart-box canvas').forEach(canvas => {
+      canvas.style.display = 'none';
+    });
+    document.querySelectorAll('.chart-box .caption').forEach(cap => {
+      cap.textContent = 'Gráfico no disponible (Chart.js no cargado)';
+    });
+    return;
+  }
+
+  console.log('Chart.js disponible. Inicializando gráficos...');
+  initCharts();
+
+  // 3. Forzar que los elementos .reveal sean visibles (por si acaso)
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+
+  // 4. Navegación activa por scroll
+  const navLinks = document.querySelectorAll('nav.subnav a');
+  const sections = Array.from(navLinks).map(l => document.getElementById(l.dataset.sec)).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    const nio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const link = document.querySelector(`nav.subnav a[data-sec="${e.target.id}"]`);
+          if (link) {
+            link.classList.add('active');
+            link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(s => nio.observe(s));
+  }
+});
+
+// ---------------------------------------------------------------
+// FUNCIÓN PARA CREAR TODOS LOS GRÁFICOS
+// ---------------------------------------------------------------
+function initCharts() {
+  // Helper para opciones base
+  function baseBarOptions(extra) {
+    return Object.assign({
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, beginAtZero: true } }
+    }, extra || {});
+  }
+
+  // --- Regiones (con toggle) ---
+  let regionChartInstance = null;
+  function renderRegionChart(mode) {
+    const sorted = [...regions].sort((a, b) => mode === 'schools' ? b.schools - a.schools : b.students - a.students);
+    const labels = sorted.map(r => r.name);
+    const data = sorted.map(r => mode === 'schools' ? r.schools : r.students);
+    const ctx = document.getElementById('regionChart');
+    if (!ctx) return;
+    if (regionChartInstance) regionChartInstance.destroy();
+    regionChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: YELLOW,
+          borderRadius: 3,
+          barPercentage: 0.7
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: c => (mode === 'schools' ? fmt(c.raw) + ' escuelas' : fmt(c.raw) + ' estudiantes')
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color: LINE }, ticks: { callback: v => fmt(v) } },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+  }
+  renderRegionChart('schools');
+
+  // Toggle buttons
+  document.querySelectorAll('#regToggle button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#regToggle button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      renderRegionChart(this.dataset.mode);
+    });
+  });
+
+  // --- Multigrado ---
+  new Chart(document.getElementById('multigradoChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Rural', 'Urbana'],
+      datasets: [{ data: [21.1, 0.3], backgroundColor: [YELLOW, URBAN], borderRadius: 4, barPercentage: 0.45 }]
+    },
+    options: baseBarOptions({
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + '%' } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, ticks: { callback: v => v + '%' }, max: 25 } }
+    })
+  });
+
+  // --- Niveles ---
+  new Chart(document.getElementById('nivelesChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Matrícula rural'],
+      datasets: [
+        { label: 'Parvularia', data: [12.1], backgroundColor: '#c9cbce' },
+        { label: 'Básica', data: [74.6], backgroundColor: YELLOW },
+        { label: 'Media C-H', data: [6.5], backgroundColor: URBAN },
+        { label: 'Media T-P', data: [5.5], backgroundColor: SLATE },
+        { label: 'Especial', data: [1.3], backgroundColor: '#8a8d91' }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, boxHeight: 12, padding: 16 } },
+        tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
+      },
+      scales: {
+        x: { stacked: true, max: 100, grid: { color: LINE }, ticks: { callback: v => v + '%' } },
+        y: { stacked: true, grid: { display: false } }
+      }
+    }
+  });
+
+  // --- Trayectoria ---
+  new Chart(document.getElementById('trayectoriaChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Pasa a liceo urbano', 'Sigue en lo rural', 'Repite o deserta'],
+      datasets: [{ data: [70.1, 25.9, 4.0], backgroundColor: [URBAN, YELLOW, SLATE], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.label}: ${c.raw}%` } } } }
+  });
+
+  // --- Dependencia ---
+  new Chart(document.getElementById('dependenciaChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Municipal', 'SLEP', 'Particular subvencionado'],
+      datasets: [{ data: [67.1, 10.8, 21.9], backgroundColor: [URBAN, SLATE, YELLOW], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.label}: ${c.raw}%` } } } }
+  });
+
+  // --- Financiamiento ---
+  new Chart(document.getElementById('finChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Rural', 'Urbano'],
+      datasets: [{ data: [190579, 145549], backgroundColor: [YELLOW, URBAN], borderRadius: 4, barPercentage: 0.45 }]
+    },
+    options: baseBarOptions({
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '$' + fmt(c.raw) } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, ticks: { callback: v => '$' + fmt(v) } } }
+    })
+  });
+
+  // --- SIMCE cobertura ---
+  new Chart(document.getElementById('coberturaChart'), {
+    type: 'bar',
+    data: {
+      labels: ['4° básico', 'II° medio'],
+      datasets: [
+        { label: 'Rural', data: [76.4, 79.8], backgroundColor: YELLOW, borderRadius: 4 },
+        { label: 'Urbano', data: [86.2, 82.8], backgroundColor: URBAN, borderRadius: 4 }
+      ]
+    },
+    options: baseBarOptions({
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, boxHeight: 12, padding: 16 } },
+        tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
+      },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, max: 100, ticks: { callback: v => v + '%' } } }
+    })
+  });
+
+  // --- Brecha SIMCE ---
+  new Chart(document.getElementById('brechaChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Lectura', 'Matemática'],
+      datasets: [{ data: [10.4, 12], backgroundColor: YELLOW, borderRadius: 4, barPercentage: 0.5 }]
+    },
+    options: baseBarOptions({
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + ' pts' } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, ticks: { callback: v => v + ' pts' } } }
+    })
+  });
+
+  // --- Superior ---
+  new Chart(document.getElementById('superiorChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Urbano', 'Rural'],
+      datasets: [{ data: [53.2, 48.1], backgroundColor: [URBAN, YELLOW], borderRadius: 4, barPercentage: 0.45 }]
+    },
+    options: baseBarOptions({
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + '%' } } },
+      scales: { x: { grid: { display: false } }, y: { grid: { color: LINE }, max: 60, ticks: { callback: v => v + '%' } } }
+    })
+  });
+
+  // --- Tendencia ---
+  new Chart(document.getElementById('tendenciaChart'), {
+    type: 'line',
+    data: {
+      labels: ['2018', '2022', '2024'],
+      datasets: [
+        { label: 'Matrícula rural', data: [272919, 281537, 273935], borderColor: YELLOW, backgroundColor: YELLOW, tension: 0.25, pointRadius: 5, borderWidth: 3 },
+        { label: 'Sistema total', data: [3582351, 3644536, null], borderColor: URBAN, backgroundColor: URBAN, tension: 0.25, pointRadius: 5, borderWidth: 2, yAxisID: 'y1', borderDash: [4, 3] }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, boxHeight: 12, padding: 16 } },
+        tooltip: { callbacks: { label: c => c.raw === null ? 'Sin dato' : `${c.dataset.label}: ${fmt(c.raw)}` } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { position: 'left', grid: { color: LINE }, ticks: { callback: v => fmt(v) }, title: { display: true, text: 'Matrícula rural' } },
+        y1: { position: 'right', grid: { display: false }, ticks: { callback: v => fmt(v) }, title: { display: true, text: 'Sistema total' } }
+      }
+    }
+  });
+
+  // --- Selector de región ---
+  const regionSelect = document.getElementById('regionSelect');
+  regions.forEach((r, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = r.name;
+    regionSelect.appendChild(opt);
+  });
+  function updateRegionDetail(idx) {
+    const r = regions[idx];
+    document.getElementById('rdSchools').textContent = fmt(r.schools);
+    document.getElementById('rdSchoolsPct').textContent = r.schoolsPct.toLocaleString('es-CL', { minimumFractionDigits: 1 }) + '%';
+    document.getElementById('rdStudents').textContent = fmt(r.students);
+    document.getElementById('rdStudentsPct').textContent = r.studentsPct.toLocaleString('es-CL', { minimumFractionDigits: 1 }) + '%';
+    const noteEl = document.getElementById('rdNote');
+    if (r.note) {
+      noteEl.textContent = r.note;
+      noteEl.classList.remove('empty');
+    } else {
+      noteEl.textContent = 'Sin dato destacado adicional para esta región en el informe.';
+      noteEl.classList.add('empty');
+    }
+  }
+  regionSelect.value = 11; // La Araucanía
+  updateRegionDetail(11);
+  regionSelect.addEventListener('change', e => updateRegionDetail(Number(e.target.value)));
+
+  console.log('Todos los gráficos inicializados correctamente.');
+}
+</script>
+</body>
+</html>

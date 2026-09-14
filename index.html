@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-<script src="chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <style>
   :root {
     --ink: #1e1f22;
@@ -50,7 +50,6 @@
   .mono { font-family: 'IBM Plex Mono', monospace; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
 
-  /* reveal - ahora solo efecto visual, siempre visibles */
   .js .reveal {
     opacity: 1;
     transform: none;
@@ -62,7 +61,6 @@
   }
   @media (prefers-reduced-motion: reduce) { .js .reveal { transition: none; } }
 
-  /* header */
   header.topbar {
     position: sticky; top: 0; z-index: 50;
     background: rgba(255,255,255,0.92);
@@ -132,7 +130,6 @@
   }
   .print-btn:hover { background: var(--yellow); color: var(--ink); }
 
-  /* subnav */
   nav.subnav {
     position: sticky; top: 68px; z-index: 49;
     background: var(--ink);
@@ -166,7 +163,6 @@
   nav.subnav a:hover { color: #fff; }
   nav.subnav a.active { color: var(--yellow); }
 
-  /* hero */
   .hero {
     padding: 80px 0 64px;
     position: relative;
@@ -247,7 +243,6 @@
   }
   .hero-cta a:hover { border-color: var(--ink); color: var(--ink-soft); }
 
-  /* sections */
   .section { padding: 80px 0; }
   .section.alt { background: var(--fog); }
   .section-head { max-width: 700px; margin-bottom: 44px; }
@@ -524,6 +519,14 @@
   .simple-list .sl-item .k { color: var(--ink-soft); }
   .simple-list .sl-item .v { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
 
+  .source-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--slate);
+    margin-top: 4px;
+    display: block;
+  }
+
   footer {
     background: var(--ink);
     color: #b7b9bc;
@@ -598,7 +601,6 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <!-- LOGO NEGRO en header (fondo claro) -->
       <img src="https://raw.githubusercontent.com/antoniavasquezr-eng/diagnostico-familiar-rural/main/f99-logo.png" 
            alt="Logo Fundación 99" 
            style="height: 40px; width: auto;">
@@ -634,17 +636,17 @@
   <section class="hero wrap">
     <p class="eyebrow"><span class="mark"></span>Sistematización de datos · 2024</p>
     <h1>Casi 3 de cada 10 escuelas de Chile son rurales. Ahí vive apenas 1 de cada 13 estudiantes.</h1>
-    <p class="lede">Un mapa de datos para entender el tamaño, la organización y las brechas de la educación rural chilena, pensado para que nuestros participantes puedan revisar cifras oficiales del sistema escolar 2023–2026 de una manera interactiva.</p>
+    <p class="lede">Un mapa de datos para entender el tamaño, la organización y las brechas de la educación rural chilena, pensado para que nuestros participantes puedan revisar cifras oficiales del sistema escolar de una manera interactiva.</p>
 
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hero-num-wrap"><span class="hero-num mono-num" data-count="29.3" data-decimals="1" data-suffix="%">0%</span><span class="hero-chip"></span></div>
-        <span class="stat-label">de los establecimientos del país son rurales — 3.121 en total.</span>
+        <span class="stat-label">de los establecimientos del país son rurales — 3.121 en total (2024).</span>
       </div>
       <div class="hero-dash">—</div>
       <div class="hero-stat">
         <div class="hero-num-wrap"><span class="hero-num mono-num" data-count="7.9" data-decimals="1" data-suffix="%">0%</span><span class="hero-chip"></span></div>
-        <span class="stat-label">de la matrícula escolar total — 273.935 estudiantes rurales.</span>
+        <span class="stat-label">de la matrícula escolar total — 273.935 estudiantes rurales (2024).</span>
       </div>
     </div>
 
@@ -678,7 +680,7 @@
         </div>
       </div>
       <div class="callout-lite reveal">
-        <b>Para tener en cuenta:</b> entre 2018 y 2022 la matrícula rural creció 3,2% (de 272.919 a 281.537 estudiantes), resistiendo mejor que la urbana el quiebre de 2019–2020. Todos los detalles de esta evolución están en la sección <a href="#tendencia" style="color:var(--yellow-deep); text-decoration:none; font-weight:600;">Tendencia →</a>.
+        <b>Para tener en cuenta:</b> entre 2017 y 2024, el número de escuelas rurales cayó 11,1% (de 3.509 a 3.121), más rápido que las urbanas (−3,9%). La matrícula rural, en cambio, se ha mantenido relativamente estable en torno al 7,8%–7,9% del total durante el mismo período, sin una tendencia sostenida al alza ni a la baja. Todos los detalles de esta evolución están en la sección <a href="#tendencia" style="color:var(--yellow-deep); text-decoration:none; font-weight:600;">Tendencia →</a>.
       </div>
     </div>
   </section>
@@ -702,7 +704,7 @@
             </div>
           </div>
           <canvas id="regionChart" height="420"></canvas>
-          <p class="caption">Fuente: sistematización de datos oficiales del sistema escolar, 2024.</p>
+          <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025), datos 2024.</p>
         </div>
 
         <div class="region-panel">
@@ -739,19 +741,20 @@
         <div>
           <p class="eyebrow"><span class="mark"></span>Organización pedagógica</p>
           <h2>El multigrado es casi un rasgo exclusivo de lo rural</h2>
-          <p class="lede" style="margin-top:12px; max-width:520px;">En un curso multigrado, un mismo docente enseña simultáneamente a estudiantes de dos o más niveles. En la educación urbana casi no existe; en la rural, es la forma en que aprende uno de cada cinco estudiantes.</p>
+          <p class="lede" style="margin-top:12px; max-width:520px;">En un curso multigrado, un mismo docente enseña simultáneamente a estudiantes de dos o más niveles (1° a 8° básico). En la educación urbana casi no existe; en la rural, es la forma en que aprende uno de cada cinco estudiantes.</p>
           <div class="simple-list">
             <div class="sl-item"><span class="k">Estudiantes rurales en cursos multigrado</span><span class="v">57.665</span></div>
             <div class="sl-item"><span class="k">Estudiantes rurales en cursos simples</span><span class="v">216.270</span></div>
           </div>
         </div>
         <div class="chart-box">
-          <div class="chart-title"><span>% de matrícula en cursos multigrado</span></div>
+          <div class="chart-title"><span>% de matrícula en cursos multigrado (2024)</span></div>
           <canvas id="multigradoChart" height="260"></canvas>
           <div class="legend-row">
             <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Rural — 21,1%</span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Urbana — 0,3%</span>
           </div>
+          <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
         </div>
       </div>
     </div>
@@ -763,12 +766,12 @@
       <div class="section-head reveal">
         <p class="eyebrow"><span class="mark"></span>Nivel de enseñanza</p>
         <h2>Una ruralidad que es, sobre todo, educación básica</h2>
-        <p class="lede">La media rural —y en especial la técnico-profesional— tiene una presencia mucho más acotada que la básica y la parvularia.</p>
+        <p class="lede">La media rural —y en especial la humanista-científica— tiene una presencia mucho más acotada que la básica y la parvularia.</p>
       </div>
       <div class="chart-box reveal">
-        <div class="chart-title"><span>Distribución de la matrícula rural por nivel de enseñanza</span></div>
+        <div class="chart-title"><span>Distribución de la matrícula rural por nivel de enseñanza (2024)</span></div>
         <canvas id="nivelesChart" height="140"></canvas>
-        <p class="caption">Fuente: sistematización de datos oficiales del sistema escolar, 2024.</p>
+        <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
       </div>
     </div>
   </section>
@@ -782,17 +785,18 @@
           <h2>La escuela rural básica como puerta de salida</h2>
           <p class="lede" style="margin-top:12px; max-width:520px;">De cada 10 estudiantes rurales que terminan 8° básico, 7 continúan I° medio en un establecimiento urbano. Solo 1 de cada 4 se mantiene en la educación rural.</p>
           <div class="callout" style="margin-top:24px;">
-            La migración a un liceo urbano varía enormemente por región: en <b>Tarapacá solo el 8,6%</b> se traslada, mientras que en <b>Magallanes lo hace el 100%</b> — aunque sobre una cohorte rural muy pequeña.
+            La migración a un liceo urbano varía enormemente por región: en <b>Tarapacá solo el 8,6%</b> se traslada, mientras que en <b>Magallanes lo hace el 100%</b> — aunque sobre una cohorte rural muy pequeña (23 estudiantes en 2023).
           </div>
         </div>
         <div class="chart-box">
-          <div class="chart-title"><span>Destino tras 8° básico rural (2023)</span></div>
+          <div class="chart-title"><span>Destino tras 8° básico rural (cohorte 2023→2024)</span></div>
           <canvas id="trayectoriaChart" height="260"></canvas>
           <div class="legend-row">
             <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Pasa a liceo urbano — 70,1%</span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Sigue en lo rural — 25,9%</span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--slate)"></span>Repite o deserta — 4,0%</span>
           </div>
+          <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
         </div>
       </div>
     </div>
@@ -805,19 +809,20 @@
         <div>
           <p class="eyebrow"><span class="mark"></span>Dependencia administrativa</p>
           <h2>La ruralidad sigue siendo, mayoritariamente, pública</h2>
-          <p class="lede" style="margin-top:12px; max-width:520px;">Sumando administración municipal y SLEP, cerca de 78% de la oferta rural es de gestión pública. El resto son establecimientos particulares subvencionados.</p>
+          <p class="lede" style="margin-top:12px; max-width:520px;">Sumando administración municipal y SLEP, cerca de 78% de los establecimientos rurales es de gestión pública. El resto son mayormente particulares subvencionados.</p>
           <div class="callout-lite">
             <b>Casos extremos:</b> en La Araucanía, 52,2% de las escuelas rurales son particulares subvencionadas — muy por sobre el promedio nacional. En Antofagasta, en cambio, el 100% de las escuelas rurales es municipal.
           </div>
         </div>
         <div class="chart-box">
-          <div class="chart-title"><span>Dependencia de los establecimientos rurales</span></div>
+          <div class="chart-title"><span>Dependencia de los establecimientos rurales (2024)</span></div>
           <canvas id="dependenciaChart" height="260"></canvas>
           <div class="legend-row">
             <span class="legend-item"><span class="legend-dot" style="background:var(--urban)"></span>Municipal — 67,1%</span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--slate)"></span>SLEP — 10,8%</span>
             <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>Part. subvencionado — 21,9%</span>
           </div>
+          <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025). El 0,3% restante corresponde a particular pagado.</p>
         </div>
       </div>
     </div>
@@ -827,23 +832,24 @@
   <section class="section" id="vulnerabilidad">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow"><span class="mark"></span>Vulnerabilidad socioeconómica</p>
+        <p class="eyebrow"><span class="mark"></span>Vulnerabilidad socioeconómica (IVE-JUNAEB)</p>
         <h2>La ruralidad concentra vulnerabilidad</h2>
       </div>
       <div class="two-col reveal">
         <div class="stat-card" style="border:1px solid var(--line); border-radius:var(--radius-md); box-shadow: var(--shadow-sm);">
           <div class="num-wrap"><span class="num mono-num" style="font-size:3.4rem;" data-count="90" data-suffix="%">0%</span><span class="chip-mini" style="top:-2px; right:-14px; width:12px; height:20px;"></span></div>
-          <span class="label" style="font-size:14.5px; margin-top:10px;">de los estudiantes rurales de educación básica es vulnerable socioeconómicamente — casi 9 de cada 10.</span>
+          <span class="label" style="font-size:14.5px; margin-top:10px;">de los estudiantes rurales de educación básica es prioritario o preferente según el Índice de Vulnerabilidad Escolar de JUNAEB (89,9%, 2024) — casi 9 de cada 10, frente a 77,8% en zonas urbanas.</span>
         </div>
         <div>
           <div class="callout">
-            En <b>La Araucanía</b>, la vulnerabilidad rural en básica llega a <b>95,7%</b>. <b>Los Ríos</b> y <b>La Araucanía</b> también encabezan la vulnerabilidad en enseñanza media.
+            En <b>La Araucanía</b>, la vulnerabilidad rural en básica llega a <b>95,7%</b>. En enseñanza media, <b>Los Ríos (96,7%)</b> y <b>La Araucanía (96,2%)</b> encabezan la vulnerabilidad.
           </div>
           <div class="callout-lite">
             La única excepción del país es <b>Magallanes</b>: la única región donde la vulnerabilidad rural no supera a la urbana.
           </div>
         </div>
       </div>
+      <p class="caption" style="margin-top:8px;">Fuente: JUNAEB, elaboración Villaseca (Acción Educar, 2025). El IVE mide el % de estudiantes clasificados en 1ª, 2ª o 3ª prioridad socioeconómica.</p>
     </div>
   </section>
 
@@ -880,6 +886,7 @@
       <div class="callout-lite reveal">
         <b>12,1%</b> de las escuelas rurales es unidocente (un solo profesor a cargo de todo el establecimiento) y <b>29,7%</b> tiene menos de 3 docentes — un contexto que exige liderazgo distribuido, apoyo técnico y formación específica para la enseñanza multigrado.
       </div>
+      <p class="caption" style="margin-top:8px;">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025), datos 2024.</p>
     </div>
   </section>
 
@@ -895,7 +902,7 @@
         <div class="chart-box">
           <div class="chart-title"><span>Subvención efectiva por estudiante (2023, $ CLP)</span></div>
           <canvas id="finChart" height="220"></canvas>
-          <p class="caption">31% de los establecimientos rurales con menos de 17 estudiantes recibió la subvención de piso rural en 2023.</p>
+          <p class="caption">31% de los establecimientos rurales con menos de 17 estudiantes recibió la subvención de piso rural en 2023 (69% no la recibió). Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
         </div>
       </div>
     </div>
@@ -913,7 +920,7 @@
         <div class="chart-box">
           <div class="chart-title"><span>Cobertura SIMCE por nivel (2023)</span></div>
           <canvas id="coberturaChart" height="240"></canvas>
-          <p class="caption">En escuelas rurales con menos de 5 estudiantes en 4° básico, la cobertura cae a 43%.</p>
+          <p class="caption">En escuelas rurales con menos de 5 estudiantes en 4° básico, la cobertura cae a 43%. Fuente: Agencia de la Calidad de la Educación y Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
         </div>
         <div class="chart-box">
           <div class="chart-title"><span>Brecha urbano–rural en 4° básico (2023, puntos SIMCE)</span></div>
@@ -933,13 +940,13 @@
           <h2>La brecha se achica, pero no se cierra</h2>
           <p class="lede" style="margin-top:12px; max-width:520px;">El acceso inmediato a educación superior es más bajo entre egresados rurales, aunque la tendencia reciente es positiva.</p>
           <div class="callout" style="margin-top:22px;">
-            De cada 4 estudiantes rurales adicionales que hoy acceden a educación superior, <b>3 lo hacen a la universidad</b>.
+            Entre 2017 y 2023, el número de egresados rurales que accede a educación superior subió de 2.478 a 3.254 (+31,3%). De cada 4 estudiantes rurales adicionales que hoy acceden, <b>3 lo hacen a la universidad</b>.
           </div>
         </div>
         <div class="chart-box">
-          <div class="chart-title"><span>Acceso inmediato a educación superior</span></div>
+          <div class="chart-title"><span>Acceso inmediato a educación superior (2023)</span></div>
           <canvas id="superiorChart" height="230"></canvas>
-          <p class="caption">Brecha de 5,1 puntos porcentuales a favor de lo urbano.</p>
+          <p class="caption">Brecha de 5,1 puntos porcentuales a favor de lo urbano. Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025).</p>
         </div>
       </div>
     </div>
@@ -949,25 +956,27 @@
   <section class="section alt" id="tendencia">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow"><span class="mark"></span>Tendencia 2018–2024</p>
-        <h2>Una matrícula rural que crece, y que resistió mejor la crisis</h2>
-        <p class="lede">Mientras el sistema urbano se contraía en el quiebre 2019–2020, la matrícula rural siguió creciendo.</p>
+        <p class="eyebrow"><span class="mark"></span>Tendencia 2017–2024</p>
+        <h2>Una matrícula rural que se mantiene relativamente estable, mientras bajan las escuelas</h2>
+        <p class="lede">El número de establecimientos rurales cae de forma sostenida desde 2017, pero la matrícula rural —como % del total— se ha mantenido notablemente estable, entre 7,7% y 7,9% del sistema.</p>
       </div>
       <div class="two-col reveal">
         <div class="chart-box">
-          <div class="chart-title"><span>Matrícula rural vs. sistema total</span></div>
+          <div class="chart-title"><span>Establecimientos y matrícula rural, % del total del sistema</span></div>
           <canvas id="tendenciaChart" height="260"></canvas>
-          <p class="caption">Aproximado. Sistema total sin dato oficial 2024.</p>
+          <p class="caption">Fuente: Mineduc, elaboración Villaseca (Acción Educar, 2025), serie 2017–2024.</p>
         </div>
         <div>
           <div class="simple-list">
-            <div class="sl-item"><span class="k">Crecimiento matrícula rural 2018–2022</span><span class="v">+3,2%</span></div>
-            <div class="sl-item"><span class="k">Crecimiento sistema total 2018–2022</span><span class="v">+1,7%</span></div>
-            <div class="sl-item"><span class="k">Matrícula rural en el quiebre 2019–2020</span><span class="v" style="color:var(--yellow-deep);">+1,5%</span></div>
-            <div class="sl-item"><span class="k">Matrícula urbana en el quiebre 2019–2020</span><span class="v" style="color:var(--ink-soft);">−0,6%</span></div>
+            <div class="sl-item"><span class="k">Establecimientos rurales, 2017</span><span class="v">3.509 (30,9%)</span></div>
+            <div class="sl-item"><span class="k">Establecimientos rurales, 2024</span><span class="v">3.121 (29,3%)</span></div>
+            <div class="sl-item"><span class="k">Variación de escuelas rurales, 2017–2024</span><span class="v" style="color:var(--yellow-deep);">−11,1%</span></div>
+            <div class="sl-item"><span class="k">Variación de escuelas urbanas, 2017–2024</span><span class="v" style="color:var(--ink-soft);">−3,9%</span></div>
+            <div class="sl-item"><span class="k">Matrícula rural, 2017</span><span class="v">265.780 (7,8%)</span></div>
+            <div class="sl-item"><span class="k">Matrícula rural, 2024</span><span class="v">273.935 (7,9%)</span></div>
           </div>
           <div class="callout-lite">
-            La matrícula rural resistió el shock 2019–2020 mejor que la urbana, y en 2024 se registraron 273.935 estudiantes rurales — consistente con el nivel alcanzado tras el período de crecimiento 2018–2022.
+            A diferencia de los establecimientos —que se cierran de forma sostenida, sobre todo por su baja matrícula—, el porcentaje de estudiantes en zona rural se ha mantenido notablemente estable entre 2017 y 2024, oscilando siempre entre 7,7% y 7,9% del total nacional, sin una tendencia clara al alza ni a la baja.
           </div>
         </div>
       </div>
@@ -986,19 +995,16 @@
     </div>
     <div>
       <h3>Sobre los datos</h3>
-      <p>Cifras del sistema escolar chileno, año de referencia 2023–2026 (Mineduc / Agencia de la Calidad de la Educación). Los porcentajes están redondeados a un decimal y pueden no sumar exactamente 100% por efecto del redondeo. Sistematización elaborada con fines educativos para Fundación 99.</p>
+      <p>La mayoría de las cifras de esta página corresponde a la elaboración de Manuel Villaseca Vial, <em>"Panorama de la educación rural en Chile"</em> (Acción Educar, abril de 2025), a partir de bases de datos públicas del Ministerio de Educación (Mineduc), la Junta Nacional de Auxilio Escolar y Becas (JUNAEB) y la Agencia de la Calidad de la Educación, con año de referencia 2024 (SIMCE y acceso a educación superior: 2023). Los porcentajes están redondeados a un decimal y pueden no sumar exactamente 100% por efecto del redondeo. Sistematización elaborada con fines educativos para Fundación 99.</p>
     </div>
   </div>
   <div class="wrap foot-bottom">
     <span>Fundación 99 — Educación rural en Chile</span>
-    <span>Actualizado 2026</span>
+    <span>Actualizado septiembre 2026</span>
   </div>
 </footer>
 
 <script>
-// ---------------------------------------------------------------
-// DATOS COMPLETOS
-// ---------------------------------------------------------------
 const regions = [
   { name: "Arica y Parinacota", schools: 30, schoolsPct: 1.0, students: 2818, studentsPct: 1.0, note: null },
   { name: "Tarapacá", schools: 49, schoolsPct: 1.6, students: 13255, studentsPct: 4.8, note: "Solo 8,6% de quienes terminan 8° básico rural migra a un liceo urbano: la menor migración del país." },
@@ -1012,22 +1018,16 @@ const regions = [
   { name: "Ñuble", schools: 198, schoolsPct: 6.3, students: 14717, studentsPct: 5.4, note: null },
   { name: "Biobío", schools: 280, schoolsPct: 9.0, students: 25377, studentsPct: 9.3, note: null },
   { name: "La Araucanía", schools: 578, schoolsPct: 18.5, students: 32566, studentsPct: 11.9, note: "La región con más escuelas rurales del país. 52,2% son particulares subvencionadas y la vulnerabilidad en básica llega a 95,7%." },
-  { name: "Los Ríos", schools: 245, schoolsPct: 7.9, students: 15298, studentsPct: 5.6, note: "Una de las regiones con mayor vulnerabilidad rural en enseñanza media." },
+  { name: "Los Ríos", schools: 245, schoolsPct: 7.9, students: 15298, studentsPct: 5.6, note: "La región con mayor vulnerabilidad rural en enseñanza media (96,7%)." },
   { name: "Los Lagos", schools: 483, schoolsPct: 15.5, students: 29458, studentsPct: 10.8, note: null },
   { name: "Aysén", schools: 34, schoolsPct: 1.1, students: 3363, studentsPct: 1.2, note: null },
-  { name: "Magallanes", schools: 13, schoolsPct: 0.4, students: 248, studentsPct: 0.1, note: "El 100% de quienes terminan 8° básico rural pasa a un liceo urbano (cohorte muy pequeña). Es también la única región donde la vulnerabilidad rural no supera a la urbana." }
+  { name: "Magallanes", schools: 13, schoolsPct: 0.4, students: 248, studentsPct: 0.1, note: "El 100% de quienes terminan 8° básico rural pasa a un liceo urbano (cohorte muy pequeña, 23 estudiantes). Es también la única región donde la vulnerabilidad rural no supera a la urbana." }
 ];
 
 const INK = '#1e1f22', YELLOW = '#f5d90a', URBAN = '#2b2e33', SLATE = '#7a7d82', LINE = '#e1e0db';
 
-// ---------------------------------------------------------------
-// FUNCIÓN PARA FORMATEAR NÚMEROS
-// ---------------------------------------------------------------
 function fmt(n) { return Number(n).toLocaleString('es-CL'); }
 
-// ---------------------------------------------------------------
-// CONTADORES ANIMADOS (se ejecutan al cargar la página)
-// ---------------------------------------------------------------
 function animateCounter(el) {
   const target = parseFloat(el.dataset.count);
   if (isNaN(target)) return;
@@ -1038,41 +1038,28 @@ function animateCounter(el) {
 
   function tick(now) {
     const p = Math.min(1, (now - start) / duration);
-    // Función de easing para un efecto más suave
     const eased = 1 - Math.pow(1 - p, 3);
     const current = target * eased;
     el.textContent = current.toLocaleString('es-CL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
     if (p < 1) {
       requestAnimationFrame(tick);
     } else {
-      // Aseguramos el valor final exacto
       el.textContent = target.toLocaleString('es-CL', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
     }
   }
   requestAnimationFrame(tick);
 }
 
-// ---------------------------------------------------------------
-// INICIALIZACIÓN AL CARGAR LA PÁGINA
-// ---------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM cargado. Inicializando...');
-
-  // 1. Activar contadores
   const counterEls = document.querySelectorAll('.mono-num[data-count]');
-  console.log(`Encontrados ${counterEls.length} contadores.`);
   counterEls.forEach(el => {
-    // Forzar el valor inicial a 0 para que la animación sea visible
     const suffix = el.dataset.suffix || '';
     const decimals = parseInt(el.dataset.decimals || '0', 10);
     el.textContent = '0'.padEnd(decimals+1, '0').replace('.', ',') + suffix;
     animateCounter(el);
   });
 
-  // 2. Cargar gráficos si Chart.js está disponible
   if (typeof Chart === 'undefined') {
-    console.warn('Chart.js no está cargado. Los gráficos no se mostrarán.');
-    // Ocultar los canvas o mostrar un mensaje
     document.querySelectorAll('.chart-box canvas').forEach(canvas => {
       canvas.style.display = 'none';
     });
@@ -1082,13 +1069,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  console.log('Chart.js disponible. Inicializando gráficos...');
   initCharts();
 
-  // 3. Forzar que los elementos .reveal sean visibles (por si acaso)
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
 
-  // 4. Navegación activa por scroll
   const navLinks = document.querySelectorAll('nav.subnav a');
   const sections = Array.from(navLinks).map(l => document.getElementById(l.dataset.sec)).filter(Boolean);
   if ('IntersectionObserver' in window) {
@@ -1108,11 +1092,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ---------------------------------------------------------------
-// FUNCIÓN PARA CREAR TODOS LOS GRÁFICOS
-// ---------------------------------------------------------------
 function initCharts() {
-  // Helper para opciones base
   function baseBarOptions(extra) {
     return Object.assign({
       responsive: true,
@@ -1122,7 +1102,6 @@ function initCharts() {
     }, extra || {});
   }
 
-  // --- Regiones (con toggle) ---
   let regionChartInstance = null;
   function renderRegionChart(mode) {
     const sorted = [...regions].sort((a, b) => mode === 'schools' ? b.schools - a.schools : b.students - a.students);
@@ -1163,7 +1142,6 @@ function initCharts() {
   }
   renderRegionChart('schools');
 
-  // Toggle buttons
   document.querySelectorAll('#regToggle button').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('#regToggle button').forEach(b => b.classList.remove('active'));
@@ -1172,7 +1150,6 @@ function initCharts() {
     });
   });
 
-  // --- Multigrado ---
   new Chart(document.getElementById('multigradoChart'), {
     type: 'bar',
     data: {
@@ -1185,7 +1162,6 @@ function initCharts() {
     })
   });
 
-  // --- Niveles ---
   new Chart(document.getElementById('nivelesChart'), {
     type: 'bar',
     data: {
@@ -1193,7 +1169,7 @@ function initCharts() {
       datasets: [
         { label: 'Parvularia', data: [12.1], backgroundColor: '#c9cbce' },
         { label: 'Básica', data: [74.6], backgroundColor: YELLOW },
-        { label: 'Media C-H', data: [6.5], backgroundColor: URBAN },
+        { label: 'Media H-C', data: [6.5], backgroundColor: URBAN },
         { label: 'Media T-P', data: [5.5], backgroundColor: SLATE },
         { label: 'Especial', data: [1.3], backgroundColor: '#8a8d91' }
       ]
@@ -1213,7 +1189,6 @@ function initCharts() {
     }
   });
 
-  // --- Trayectoria ---
   new Chart(document.getElementById('trayectoriaChart'), {
     type: 'doughnut',
     data: {
@@ -1223,7 +1198,6 @@ function initCharts() {
     options: { responsive: true, maintainAspectRatio: true, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.label}: ${c.raw}%` } } } }
   });
 
-  // --- Dependencia ---
   new Chart(document.getElementById('dependenciaChart'), {
     type: 'doughnut',
     data: {
@@ -1233,7 +1207,6 @@ function initCharts() {
     options: { responsive: true, maintainAspectRatio: true, cutout: '62%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.label}: ${c.raw}%` } } } }
   });
 
-  // --- Financiamiento ---
   new Chart(document.getElementById('finChart'), {
     type: 'bar',
     data: {
@@ -1246,7 +1219,6 @@ function initCharts() {
     })
   });
 
-  // --- SIMCE cobertura ---
   new Chart(document.getElementById('coberturaChart'), {
     type: 'bar',
     data: {
@@ -1265,7 +1237,6 @@ function initCharts() {
     })
   });
 
-  // --- Brecha SIMCE ---
   new Chart(document.getElementById('brechaChart'), {
     type: 'bar',
     data: {
@@ -1278,7 +1249,6 @@ function initCharts() {
     })
   });
 
-  // --- Superior ---
   new Chart(document.getElementById('superiorChart'), {
     type: 'bar',
     data: {
@@ -1291,14 +1261,13 @@ function initCharts() {
     })
   });
 
-  // --- Tendencia ---
   new Chart(document.getElementById('tendenciaChart'), {
     type: 'line',
     data: {
-      labels: ['2018', '2022', '2024'],
+      labels: ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
       datasets: [
-        { label: 'Matrícula rural', data: [272919, 281537, 273935], borderColor: YELLOW, backgroundColor: YELLOW, tension: 0.25, pointRadius: 5, borderWidth: 3 },
-        { label: 'Sistema total', data: [3582351, 3644536, null], borderColor: URBAN, backgroundColor: URBAN, tension: 0.25, pointRadius: 5, borderWidth: 2, yAxisID: 'y1', borderDash: [4, 3] }
+        { label: 'Escuelas rurales (% del total)', data: [30.9, 30.8, 30.5, 30.5, 30.1, 29.8, 29.5, 29.3], borderColor: URBAN, backgroundColor: URBAN, tension: 0.25, pointRadius: 4, borderWidth: 2 },
+        { label: 'Matrícula rural (% del total)', data: [7.8, 7.8, 7.7, 7.9, 7.8, 7.8, 7.9, 7.9], borderColor: YELLOW, backgroundColor: YELLOW, tension: 0.25, pointRadius: 4, borderWidth: 3, yAxisID: 'y1' }
       ]
     },
     options: {
@@ -1306,17 +1275,16 @@ function initCharts() {
       maintainAspectRatio: true,
       plugins: {
         legend: { position: 'bottom', labels: { boxWidth: 12, boxHeight: 12, padding: 16 } },
-        tooltip: { callbacks: { label: c => c.raw === null ? 'Sin dato' : `${c.dataset.label}: ${fmt(c.raw)}` } }
+        tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } }
       },
       scales: {
         x: { grid: { display: false } },
-        y: { position: 'left', grid: { color: LINE }, ticks: { callback: v => fmt(v) }, title: { display: true, text: 'Matrícula rural' } },
-        y1: { position: 'right', grid: { display: false }, ticks: { callback: v => fmt(v) }, title: { display: true, text: 'Sistema total' } }
+        y: { position: 'left', grid: { color: LINE }, ticks: { callback: v => v + '%' }, title: { display: true, text: '% escuelas rurales' }, min: 25, max: 32 },
+        y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v + '%' }, title: { display: true, text: '% matrícula rural' }, min: 6, max: 9 }
       }
     }
   });
 
-  // --- Selector de región ---
   const regionSelect = document.getElementById('regionSelect');
   regions.forEach((r, i) => {
     const opt = document.createElement('option');
@@ -1339,11 +1307,9 @@ function initCharts() {
       noteEl.classList.add('empty');
     }
   }
-  regionSelect.value = 11; // La Araucanía
+  regionSelect.value = 11;
   updateRegionDetail(11);
   regionSelect.addEventListener('change', e => updateRegionDetail(Number(e.target.value)));
-
-  console.log('Todos los gráficos inicializados correctamente.');
 }
 </script>
 </body>
